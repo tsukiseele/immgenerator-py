@@ -29,7 +29,7 @@ print('===================== CONFIG =====================');
 print(json.dumps(CONFIG.__dict__))
 print('==================================================');
 
-input = input('Enter the image directory path(or drag the directory into the window):\r\n')
+cmd_input = input('Enter the image directory path(or drag the directory into the window):\r\n')
 
 def deep_list_dir(dir: str, filter_suffix: List[str] = []) -> List[os.DirEntry[str]]: 
     entries = os.scandir(dir)
@@ -46,7 +46,8 @@ def deep_list_dir(dir: str, filter_suffix: List[str] = []) -> List[os.DirEntry[s
                     results.append(entry)
     return results
 
-input_path = Path(input)
+timestamp = time.time()
+input_path = Path(cmd_input)
 files = deep_list_dir(input_path, ['.png'])
 
 output_path = input_path.parents[0].joinpath(f'{input_path.name}.zip')
@@ -55,7 +56,6 @@ paintings = []
 imageDataSet = []
 
 for index, file in enumerate(files):
-    print('FN:::' , file.path)
     image = Image.open(file)
     size = image.width, image.height
     blockSize = calcBlockSize(size[0], size[1]);
@@ -97,3 +97,5 @@ for index, image in enumerate(imageDataSet):
     }))
 
 output_zip.close()
+
+input(f'{time.time() - timestamp}s')
